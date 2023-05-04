@@ -8,7 +8,7 @@ import java.nio.file.Path;
 public class NewFile {
 
     public static File file;
-
+    //метож для создания файлов под определенную ОС
     public NewFile(String fileWay, String nameFile )  {
 
         Path path = Path.of(fileWay);

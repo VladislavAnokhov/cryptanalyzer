@@ -9,7 +9,9 @@ public class Decipher {
     public static final Decipher decipher = new Decipher();
     static private int ci;
     static private char pi;
-
+    //key - секретный ключ для шифровки
+    //pi - буква в тексте
+    //ci - буква в шифрованном тексте
     private Decipher() {
     }
 

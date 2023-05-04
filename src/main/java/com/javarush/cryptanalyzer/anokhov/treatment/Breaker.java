@@ -42,6 +42,7 @@ public class Breaker {
             while (reader.ready()) {
                 builder.append((char) reader.read());
             }
+            //цикл перебора ключей
             do {
                 for (int i = 0; i < builder.length(); i++) {
                     pi = builder.charAt(i);
@@ -49,16 +50,16 @@ public class Breaker {
                     if (ci <0){
                         ci = Alfa.alfaBet.size()+ci;}
                     bufferForBreaker.append(Alfa.alfaBet.get(ci));}
-
-                System.out.println(bufferForBreaker);
                 pravda = checking(bufferForBreaker);
+
+                //если поиск по паттернам вернулся false ключ становится на 1 больше и обнуляется StringBuilder
                 if (!pravda){
                     key++;
                     bufferForBreaker.setLength(0);}
-                if (key>Alfa.alfaBet.size()){
+               /* if (key>Alfa.alfaBet.size()){
                     System.err.println("неверный код");
                     break;
-                }
+                }*/
             }
             while (!pravda);
             System.out.println(keyString + key);
@@ -77,21 +78,24 @@ public class Breaker {
             System.out.println(e.getMessage());
         }
     }
-
+   // проверка совпадений в тексте.
     private static Boolean checking(StringBuilder builder){
         Boolean result = false;
-        spaces =  Breaker.count(String.valueOf(builder), patternSpaces); // минимум 3
-        points = Breaker.count(String.valueOf(builder), patternPointInTheEnd); // точка минимум одна
+        spaces =  Breaker.count(String.valueOf(builder), patternSpaces);
+        points = Breaker.count(String.valueOf(builder), patternPointInTheEnd);
         commas = Breaker.count(String.valueOf(builder), patternCommas);
         falseCommas = Breaker.count(String.valueOf(builder),patternOfFalseCommas);
 
+        //условия верности расшифровки файла
+        //минимум три пробела, одна точка и одна запятая (например, если есть только одно предложение)
+        //должно быть 0 совпадений с неправильной выставленной запятой
         if (spaces>=3 && points>=1 && commas>= 1 && falseCommas==0) {
             result = true;
         }
         return result;
     }
 
-
+    // метод для поиска паттернов
     private static int count(String string , Pattern pattern) {
         Matcher matcher = pattern.matcher(string);
         int result = 0;

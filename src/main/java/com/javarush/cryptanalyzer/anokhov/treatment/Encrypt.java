@@ -9,10 +9,14 @@ public class Encrypt {
     public static final Encrypt encrypt = new Encrypt();
     static  private int ci ;
     static private int pi;
+    //key - секретный ключ для шифровки
+    //pi - буква в тексте
+    //ci - буква в шифрованном тексте
     public Encrypt(){
     }
+    //метод для шифрования текста
     public static void encrypt(){
-        //  Coding coding = new Coding();
+
         Scanner scanner = new Scanner(System.in);
         Scanner scanner1 = new Scanner(System.in);
         String fileWay = scanner.nextLine();
@@ -23,6 +27,9 @@ public class Encrypt {
         StringBuilder stringBuilder=new StringBuilder();
         try (FileReader in = new FileReader(fileWay); BufferedReader reader = new BufferedReader(in)) {
             while (reader.ready()) {
+                //цикл для пропускания символов которых нету в нашем алфавите
+                //если метод Alfa возратил -1, значит символа нету в алфавите, и метод перейдет
+                //на другой символ в тексте без шифровки
                 do {
                     pi = Alfa.numberOfAlfaBet((char) reader.read());
                 }

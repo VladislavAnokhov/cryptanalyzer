@@ -2,9 +2,12 @@ package com.javarush.cryptanalyzer.anokhov;
 
 import com.javarush.cryptanalyzer.anokhov.screen.Screen;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class StartPoint {
     public static void main(String[] args) {
-        Screen.saysAndAsk();
+           Screen.saysAndAsk();
     }
 }
 // ======файлы для теста========
@@ -21,3 +24,4 @@ public class StartPoint {
 // encoded.txt - зашифрованныый текст
 // output.txt - файл результат расшифровки или брутфорс
 // dictionary.txt - файл для анализа текста
+
