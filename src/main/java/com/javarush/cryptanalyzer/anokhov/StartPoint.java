@@ -1,27 +1,28 @@
 package com.javarush.cryptanalyzer.anokhov;
 
-import com.javarush.cryptanalyzer.anokhov.screen.Screen;
+import com.javarush.cryptanalyzer.anokhov.aplication.Application;
+import com.javarush.cryptanalyzer.anokhov.controller.MainController;
+import com.javarush.cryptanalyzer.anokhov.entity.Mode;
+import com.javarush.cryptanalyzer.anokhov.entity.Result;
+import com.javarush.cryptanalyzer.anokhov.exceptions.ApplicationException;
+
+import com.javarush.cryptanalyzer.anokhov.view.ConsolView;
+import com.javarush.cryptanalyzer.anokhov.view.View;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 
 public class StartPoint {
     public static void main(String[] args) {
-           Screen.saysAndAsk();
+
+        View view = new ConsolView();
+        MainController mainController = new MainController(view);
+        Application application = new Application(mainController);
+        Result  result= application.run();
+        application.printResult(result);
+
     }
 }
-// ======файлы для теста========
-//C:\Users\User\Desktop\testing\PROJECT №1\testFile.txt
-//C:\Users\User\Desktop\testing\PROJECT №1\file.txt
-//C:\Users\User\Desktop\testing\PROJECT №1\new.txt
-//C:\Users\User\Desktop\testing\PROJECT №1\plan of atack.txt
-//C:\Users\User\Desktop\testing\PROJECT №1\ЗашифрованныйFile.txt
 
-////////ТРЕБОВАНИЯ!!!!////////
-// требование по созданию пути выполнено
-//
-// input.txt - файл который будем шифровать
-// encoded.txt - зашифрованныый текст
-// output.txt - файл результат расшифровки или брутфорс
-// dictionary.txt - файл для анализа текста
 

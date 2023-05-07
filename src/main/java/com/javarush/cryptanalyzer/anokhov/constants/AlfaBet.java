@@ -1,9 +1,9 @@
-package com.javarush.cryptanalyzer.anokhov.alfabet;
+package com.javarush.cryptanalyzer.anokhov.constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alfa {
+public class AlfaBet {
     public static final List<Character> alfaBet =new ArrayList<>();
 
     private static  final String lettersUpperCase = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
@@ -13,22 +13,23 @@ public class Alfa {
 
     private static final String ALPHABET = lettersUpperCase+getLettersLowerCase+numbers+symbols;
 
-    public static final Alfa alfa = new Alfa();
-    private Alfa() {
+    private AlfaBet() {
         for (int i = 0; i < ALPHABET.length(); i++) {
             alfaBet.add(ALPHABET.charAt(i));
         }
     }
-    static public int numberOfAlfaBet(char character) { //возврщает индекса буквы/символа из массива
+
+    /*Метод, с помощью которого получаем номер символа в списке.
+    * Метод может вернуть значение -1, если символ не был найден в списке.*/
+    static public int numberOfAlfaBet(char character) {
         int charNumber=0;
-        for (char bukva : Alfa.alfaBet) {
+        for (char bukva : AlfaBet.alfaBet) {
             if (character == bukva) {
-                charNumber = Alfa.alfaBet.indexOf(bukva);
+                charNumber = AlfaBet.alfaBet.indexOf(bukva);
                 break;
             }
             else charNumber=-1;
         }
-
         return charNumber;
     }
 }

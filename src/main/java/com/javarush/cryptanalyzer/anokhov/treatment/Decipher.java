@@ -1,50 +1,37 @@
 package com.javarush.cryptanalyzer.anokhov.treatment;
-import com.javarush.cryptanalyzer.anokhov.alfabet.Alfa;
-import com.javarush.cryptanalyzer.anokhov.creatorNewFiles.NewFile;
-import com.javarush.cryptanalyzer.anokhov.screen.Screen;
+import com.javarush.cryptanalyzer.anokhov.constants.AlfaBet;
+import com.javarush.cryptanalyzer.anokhov.constants.ResultCode;
+import com.javarush.cryptanalyzer.anokhov.entity.Mode;
+import com.javarush.cryptanalyzer.anokhov.entity.Result;
+import com.javarush.cryptanalyzer.anokhov.exceptions.ApplicationException;
 import java.io.*;
-import java.util.Scanner;
 
-public class Decipher {
-    public static final Decipher decipher = new Decipher();
+public class Decipher implements Function {
     static private int ci;
     static private char pi;
     //key - секретный ключ для шифровки
     //pi - буква в тексте
     //ci - буква в шифрованном тексте
-    private Decipher() {
-    }
-
-    public static void decoding() {
-        Scanner scanner = new Scanner(System.in);
-        Scanner scanner1 = new Scanner(System.in);
-        String fileWay = scanner.nextLine();
-        int  key= scanner1.nextInt();
-        scanner.close();
-        scanner1.close();
-
+@Override
+     /* Метод для расшифровки текста. Возвращает результат процесса,
+     * а также расшифрованный текс ввиде StringBuilder */
+    public Result execute(Mode mode) {
         StringBuilder stringBuilder = new StringBuilder();
-        try (FileReader in = new FileReader(fileWay); BufferedReader reader = new BufferedReader(in)) { // нужно сделать чтоб этот же файл изменялся
+
+        try (FileReader in = new FileReader(mode.getFileWayForRead()); BufferedReader reader = new BufferedReader(in)) { // нужно сделать чтоб этот же файл изменялся
             while (reader.ready()) {
-                pi =(char) reader.read();
-                ci = Alfa.numberOfAlfaBet(pi) - key;
-                if (ci <0){
-                    ci = Alfa.alfaBet.size()+ci;}
-                stringBuilder.append(Alfa.alfaBet.get(ci));
+                pi = (char) reader.read();
+                ci = AlfaBet.numberOfAlfaBet(pi) - mode.getKey();
+                if (ci < 0) {
+                    ci = AlfaBet.alfaBet.size() + ci;
+                }
+                stringBuilder.append(AlfaBet.alfaBet.get(ci));
             }
-
-        } catch (IOException e) {
-            Screen.errorFile();
-            System.out.println(e.getMessage());
         }
+         catch (IOException e){
+                return new Result(ResultCode.ERROR,new ApplicationException(ApplicationException.stringErrorOfFile,e));
+            }
+            return new Result(ResultCode.GOOD,stringBuilder);
 
-        NewFile newFile = new NewFile(fileWay,"output");
-        try (FileWriter out = new FileWriter(newFile.file); BufferedWriter writer = new BufferedWriter(out)){
-            writer.write(String.valueOf(stringBuilder));
-            System.out.println("сообщение расшифрованно");
-        } catch (IOException e) {
-            Screen.errorFile();
-            System.out.println(e.getMessage());
-        }
     }
 }

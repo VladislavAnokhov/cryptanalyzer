@@ -1,27 +1,26 @@
 package com.javarush.cryptanalyzer.anokhov.creatorNewFiles;
-import com.javarush.cryptanalyzer.anokhov.screen.Screen;
-
-import java.io.File;
+import com.javarush.cryptanalyzer.anokhov.constants.ResultCode;
+import com.javarush.cryptanalyzer.anokhov.entity.Result;
+import com.javarush.cryptanalyzer.anokhov.exceptions.ApplicationException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
+
 
 public class NewFile {
 
-    public static File file;
-    //метож для создания файлов под определенную ОС
-    public NewFile(String fileWay, String nameFile )  {
+    /*Метод для создания файлов. Получает путь, в котором указано куда
+    сохранять данные. Также получает сами данные для записи.
+    Возвращает результат записи*/
+    public static Result newFile( String fileWayForWrite, StringBuilder stringBuilder)  {
 
-        Path path = Path.of(fileWay);
-        file = new File( path.getParent().toString()+ System.getProperty("file.separator") + nameFile+".txt");
-        if (file.exists()) {
-            file.delete();
-        } else {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                Screen.errorFile();
-                System.err.println(e.getMessage());
-            }
+        try (FileWriter out = new FileWriter(fileWayForWrite); BufferedWriter writer = new BufferedWriter(out)){
+            writer.write(String.valueOf(stringBuilder));
         }
+        catch (IOException e){
+            return new Result(ResultCode.ERROR,new ApplicationException(ApplicationException.stringErrorOfFile,e));
+        }
+        return new Result(ResultCode.GOOD,stringBuilder);
+
     }
 }
