@@ -1,6 +1,6 @@
 package com.javarush.cryptanalyzer.anokhov.treatment;
 import com.javarush.cryptanalyzer.anokhov.constants.AlfaBet;
-import com.javarush.cryptanalyzer.anokhov.constants.ResultCode;
+import com.javarush.cryptanalyzer.anokhov.repository.ResultCode;
 import com.javarush.cryptanalyzer.anokhov.entity.Mode;
 import com.javarush.cryptanalyzer.anokhov.entity.Result;
 import com.javarush.cryptanalyzer.anokhov.exceptions.ApplicationException;
@@ -13,7 +13,7 @@ public class Decipher implements Function {
     //pi - буква в тексте
     //ci - буква в шифрованном тексте
 @Override
-     /* Метод для расшифровки текста. Возвращает результат процесса,
+     /** Метод для расшифровки текста. Возвращает результат процесса,
      * а также расшифрованный текс ввиде StringBuilder */
     public Result execute(Mode mode) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -31,7 +31,7 @@ public class Decipher implements Function {
          catch (IOException e){
                 return new Result(ResultCode.ERROR,new ApplicationException(ApplicationException.stringErrorOfFile,e));
             }
-            return new Result(ResultCode.GOOD,stringBuilder);
+            return new Result(ResultCode.GOOD,stringBuilder, mode.getKey());
 
     }
 }

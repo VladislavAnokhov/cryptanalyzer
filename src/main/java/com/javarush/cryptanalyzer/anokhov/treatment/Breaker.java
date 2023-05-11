@@ -1,6 +1,6 @@
 package com.javarush.cryptanalyzer.anokhov.treatment;
 import com.javarush.cryptanalyzer.anokhov.constants.AlfaBet;
-import com.javarush.cryptanalyzer.anokhov.constants.ResultCode;
+import com.javarush.cryptanalyzer.anokhov.repository.ResultCode;
 import com.javarush.cryptanalyzer.anokhov.entity.Mode;
 import com.javarush.cryptanalyzer.anokhov.entity.Result;
 import com.javarush.cryptanalyzer.anokhov.exceptions.ApplicationException;
@@ -8,7 +8,8 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.javarush.cryptanalyzer.anokhov.constants.ApplicationCommunication.secretKey;
+import static com.javarush.cryptanalyzer.anokhov.constants.ApplicationCommunication.errorOfKey;
+
 
 public class Breaker implements Function {
     private static int key=1;
@@ -23,19 +24,19 @@ public class Breaker implements Function {
     //ci - буква в шифрованном тексте
 
 
-       /*паттерн для поиска пробелов в тексте между слов*/
+       /**паттерн для поиска пробелов в тексте между слов*/
     private static Pattern patternSpaces = Pattern.compile(".\s.");
-      /*паттерн для поиска запятых, после которых стоит пробел*/
+      /**паттерн для поиска запятых, после которых стоит пробел*/
     private static Pattern patternCommas = Pattern.compile(".\\,\s.");
-    /*паттерн для поиска запятых, после который стоит что-либо кроме пробела
+    /**паттерн для поиска запятых, после который стоит что-либо кроме пробела
     Пример: слово ,слово - неправильная выставленная запятая*/
     private static Pattern patternOfFalseCommas = Pattern.compile(".\\,\\S");
 
-    /*паттерн для поиска предложений, которые начинаются с большой буквы и заканчиваются точкой*/
+    /**паттерн для поиска предложений, которые начинаются с большой буквы и заканчиваются точкой*/
     private static Pattern patternPointInTheEnd = Pattern.compile("[$А-ЯЁ].+[\\.!?]");
 
 
-    /* Метод для грубой переборки ключей. Тут создано два StringBuilder. Один получает данные из файла,
+    /** Метод для грубой переборки ключей. Тут создано два StringBuilder. Один получает данные из файла,
     второй создан для проверки паттернов. Если проверку не проходит, он обнуляется и заново получает
     данные из первого StringBuilder. Возвращает результат, а также расшифрованный текст ввиде StringBuilder.
     В конце метода выводит на экран ключ,который подобрал метод*/
@@ -64,22 +65,22 @@ public class Breaker implements Function {
                     key++;                    // на 1 больше и обнуляется StringBuilder
                     bufferForBreaker.setLength(0);
                 }
-               else if (key > AlfaBet.alfaBet.size()) {
-                    System.err.println("неверный код");
+                if (key > AlfaBet.alfaBet.size()) {
+                    System.err.println(errorOfKey);
+                    System.exit(0);
                     break;
                 }
             }
             while (!pravda);
-            System.out.println(secretKey+key);
         }
         catch (IOException e){
                 return new Result(ResultCode.ERROR,new ApplicationException(ApplicationException.stringErrorOfFile,e));
             }
-            return new Result(ResultCode.GOOD,bufferForBreaker);
+            return new Result(ResultCode.GOOD,bufferForBreaker,key);
     }
 
 
-     /*  Метод,который проверяет совпадения по паттернам в тексте.
+     /**  Метод,который проверяет совпадения по паттернам в тексте.
        Условия верности расшифровки файла:
        -минимум три пробела, одна точка и одна запятая (например, если есть только одно предложение)
        -должно быть 0 совпадений с неправильной выставленной запятой*/
@@ -96,7 +97,7 @@ public class Breaker implements Function {
         return result;
     }
 
-    // метод для поиска паттернов
+    /** метод для поиска паттернов*/
     private static int count(String string , Pattern pattern) {
         Matcher matcher = pattern.matcher(string);
         int result = 0;
@@ -105,6 +106,4 @@ public class Breaker implements Function {
         }
         return result;
     }
-
-
 }

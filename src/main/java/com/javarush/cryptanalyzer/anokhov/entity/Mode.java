@@ -6,6 +6,10 @@ public class Mode {
     private static String fileWayForRead;
     private static String fileWayForWrite;
 
+    /**Класс создан для передачи необходимых параметров
+     * под определенный режим, который захочет пользователь
+     */
+
     public Mode (String mode,String fileWayForRead,String fileWayForWrite ,int key){
         this.mode=mode;
         this.fileWayForRead=fileWayForRead;

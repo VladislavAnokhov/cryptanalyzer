@@ -1,4 +1,4 @@
-package com.javarush.cryptanalyzer.anokhov.constants;
+package com.javarush.cryptanalyzer.anokhov.repository;
 
 import com.javarush.cryptanalyzer.anokhov.treatment.*;
 

@@ -4,7 +4,7 @@ import com.javarush.cryptanalyzer.anokhov.entity.Mode;
 import com.javarush.cryptanalyzer.anokhov.entity.Result;
 
 public interface View {
-    Mode getParameters();
+    Mode getParameter();
 
     void printResult (Result result);
 }

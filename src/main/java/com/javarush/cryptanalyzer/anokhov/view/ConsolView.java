@@ -5,7 +5,6 @@ import com.javarush.cryptanalyzer.anokhov.entity.Mode;
 import com.javarush.cryptanalyzer.anokhov.entity.Result;
 
 import java.io.InputStream;
-import java.util.Locale;
 import java.util.Scanner;
 
 import static com.javarush.cryptanalyzer.anokhov.constants.ApplicationCommunication.*;
@@ -19,41 +18,43 @@ public class ConsolView implements View{
     private int key;
 
 
-   /*    Метод создан для взаимодействия с пользователем,
+   /**    Метод создан для взаимодействия с пользователем,
      запрос от пользователя, какой режим он хочет выполнить
      и какой файл прочитать и записать, а также запросы на ключ . */
-    public Mode getParameters() {
-        System.out.println(hi);
+   @Override
+    public Mode getParameter() {
+        AlfaBet alfaBet = new AlfaBet();
+       System.out.println(hi);
         Scanner scanner = new Scanner(System.in);
         boolean pravda = true;
         do {
             String string = scanner.nextLine();
             if (string.equalsIgnoreCase(encrypt)) {
-                mode= new Mode(encrypt, getFileWay(encrypt,read),getFileWay(encrypt,write),getKey(encrypt));
+                mode = new Mode(encrypt, getFileWay(encrypt, read), getFileWay(encrypt, write), getKey(encrypt));
+                pravda = false;
+            } else if (string.equalsIgnoreCase(decipher)) {
+                mode = new Mode(decipher, getFileWay(decipher, read), getFileWay(decipher, write), getKey(decipher));
+                pravda = false;
+            } else if (string.equalsIgnoreCase(breaker)) {
+                mode = new Mode(breaker, getFileWay(breaker, read), getFileWay(breaker, write));
                 pravda = false;
             }
-            else if (string.equalsIgnoreCase(decipher)){
-                   mode = new Mode(decipher,getFileWay(decipher,read),getFileWay(decipher,write),getKey(decipher));
-                    pravda = false;
-            }
-            else if (string.equalsIgnoreCase(breaker)){
-                    mode = new Mode(breaker,getFileWay(breaker,read),getFileWay(breaker,write));
-                    pravda = false;  }
-            }
+        }
+
         while (pravda);
         scanner.close();
         return mode;
     }
 
-    /*                Этот метод возвращает путь к файлу.
+    /**                Этот метод возвращает путь к файлу.
        Метод смотрит какой режим хочет использовать пользователь и возвращает необходимый
-       дефолтный файл(если такой необходим), либо возвращает указанный файл.
+       дефолтный файл(если такой необходим), либо возвращает указанный пользователем файл.
        Метод возвращает путь к файлу для чтения и для записи, смотря какой режим передать методу.*/
     private String getFileWay(String mode, String typeOfWay) {
         String defaultString = null;
         switch (typeOfWay){
             case read -> {
-                System.out.println(localOrOwnFile);
+                System.out.println(localOrOwnFileForConsol);
                 if (mode == encrypt)
                     defaultString = input;
                 else defaultString = encoded;
@@ -70,7 +71,7 @@ public class ConsolView implements View{
         return fileWay;
     }
 
-    /*  Этот метод возвращает ключ, который указывает пользователь,
+    /**  Этот метод возвращает ключ, который указывает пользователь,
        Либо генирирует ключ согласно размеру алфавита. Метод
        принимает режим необходимый для пользователя.*/
     private int getKey(String mode) {
@@ -78,7 +79,7 @@ public class ConsolView implements View{
         InputStream stream = System.in;
         Scanner console = new Scanner(stream);
         if (mode == encrypt ) {
-            System.out.println(randomOrSetKey);
+            System.out.println(randomOrSetKeyForConsol);
             string = console.nextLine();
             if (string == "")
             key = 1 + (int) (Math.random() * (AlfaBet.alfaBet.size() - 1));
@@ -89,13 +90,13 @@ public class ConsolView implements View{
             string = console.nextLine();
             key= Integer.parseInt(string);
         }
-        System.out.println(secretKey+key);
+      System.out.println(secretKey+key);
         console.close();
         return key;
     }
 
 
-    // Сканер для ввода пути файла
+    /** Сканер для ввода пути файла*/
     private String mineScanner (String defaultFile){
         InputStream stream = System.in;
         Scanner console = new Scanner(stream);
@@ -107,8 +108,11 @@ public class ConsolView implements View{
 
     @Override
     public void printResult(Result result) {
+        if (key == 0 ){
+            key = result.getKey();
+        }
         switch (result.getResultOfCode()){
-            case GOOD -> System.out.println(HAVEDONE);
+            case GOOD -> System.out.println(HAVEDONE+"\n"+secretKey+key);
             case ERROR-> System.out.println(EXCEPTION+result.getApplicationException().getMessage());
         }
     }
